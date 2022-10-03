@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Jeffrey C. Oliver" />
+
+
+<title>Introduction to lifeR</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to lifeR</h1>
+<h4 class="author">Jeffrey C. Oliver</h4>
+<h4 class="date">1 June, 2022</h4>
+
+
+
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<p>lifeR is an R package for identifying locations to visit in order to
+increase your bird species list count. The package relies on the <a href="https://documenter.getpostman.com/view/664302/S1ENwy59">eBird
+API</a> to query for recent observations and compare them to a user’s
+species list. The lists can be life lists, year lists, etc. The primary
+output is a report of sites to visit in a region where species
+<em>not</em> on the user’s list have been reported recently.</p>
+</div>
+<div id="installation" class="section level1">
+<h1>Installation</h1>
+<p>Currently, you will need to install the package from GitHub; you can
+do this with help from the remotes package:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="at">repo =</span> <span class="st">&quot;jcoliver/lifeR&quot;</span>)</span></code></pre></div>
+<p>If you want to have the introductory vignette included in the
+installation, then pass <code>build_vignettes = TRUE</code> in the call
+to <code>install_github()</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="at">repo =</span> <span class="st">&quot;jcoliver/lifeR&quot;</span>, <span class="at">build_vignettes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="using-lifer" class="section level1">
+<h1>Using lifeR</h1>
+<div id="requirements" class="section level2">
+<h2>Requirements</h2>
+<p>You will need a minimum of three pieces of information to use
+lifeR:</p>
+<ol style="list-style-type: decimal">
+<li>An eBird API key</li>
+<li>A list of species you have seen (life list, year list, etc.)</li>
+<li>A pair of latitude and longitude coordinates to center the search
+for potential locations.</li>
+</ol>
+<div id="ebird-api-key" class="section level3">
+<h3>1. eBird API key</h3>
+<p>Because lifeR relies on the public eBird API, you will need to have
+your own unique API key to use this package. Visit <a href="https://ebird.org/api/keygen">https://ebird.org/api/keygen</a> to
+get an eBird API key (note you will be prompted to log into your eBird
+account). The key will be a random string of letters and numbers. I
+suggest you copy the key and save it to a plain text file on your
+computer; you can use a program like Notepad or TextEdit to create plain
+text files. Save this file somewhere you will remember (like “My
+Documents”) and name it something that is recognizable
+(e.g. “ebird-api-key.txt”). We will use this file later to access the
+eBird API.</p>
+</div>
+<div id="your-species-list" class="section level3">
+<h3>2. Your species list</h3>
+<p>This should be a list of the species you have already seen, but it
+can vary based on the list you would like to add species to. If you want
+to find sites where birds you have never seen have been observed
+recently, you would use your life list. If you are working on a Big
+Year, you would use your year list. Trying to break 300 species for your
+Arizona year list? Then yes, use your Arizona species list for the
+current year. These can all be downloaded from your eBird account by
+going to <a href="https://ebird.org/lifelist/">https://ebird.org/lifelist/</a>,
+using the dropdown menus near the top of the page to select the region
+and time range of your list, then downloading the list through the
+“Download (csv)” link near the upper-right corner of the page. Save the
+file somewhere where you will remember where it is.</p>
+</div>
+<div id="latitude-and-longitude" class="section level3">
+<h3>3. Latitude and longitude</h3>
+<p>Finally, lifeR is designed to identify sites in a region for you to
+visit. Therefore, you will need to provide information on <em>where</em>
+that region is. The package uses a latitude and longitude coordinates to
+serve as the “center” of the region of interest and finds sites within a
+certain radius of that center. The maximum radius is 50 kilometers - if
+you want to search a larger area, you will just need to define two
+centers (information on doing this is provided below). If you do not
+know the latitude and longitude of your “center” I recommend Google
+Maps, which allows you to right- or control-click on a location on a
+map, and the latitude and longitude coordinates will be displayed. Note
+lifeR requires decimal degree formatted data (e.g. -110.92, <em>not</em>
+110° 55’ 12”).</p>
+</div>
+</div>
+<div id="create-the-report" class="section level2">
+<h2>Create the report</h2>
+<p>Now that you have those three pieces of information, you can build a
+report of sites to visit.</p>
+<div id="a-minimalist-example" class="section level3">
+<h3>A minimalist example</h3>
+<p>This example creates a report from a single center, near McCall,
+Idaho, USA. It uses two functions from lifeR:</p>
+<ul>
+<li><code>SplitNames</code> a helper function to deal with the format of
+species names returned from eBird, and</li>
+<li><code>SitesReport</code> a function that handles all the querying of
+eBird, comparing lists, and building the report</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lifeR)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># To use the sample list included in this package</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>list_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;example-list.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;lifeR&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># If you have your list file downloaded, replace the line above with one that </span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># indicates the location of your list file, e.g.</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># list_file &lt;- &quot;~/Desktop/ebird_world_year_2021_list.csv&quot;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the list of species into memory</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>user_list <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> list_file)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the common names of species from your list</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>my_species <span class="ot">&lt;-</span> <span class="fu">SplitNames</span>(<span class="at">x =</span> user_list<span class="sc">$</span>Species)<span class="sc">$</span>Common</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in eBird API key from a text file; replace the argument to file with </span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># the actual location of your eBird key file</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>key <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="at">file =</span> <span class="st">&quot;ebird-api-key.txt&quot;</span>, <span class="at">what =</span> <span class="st">&quot;character&quot;</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># A single center requires vector of coordinates</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Change these, unless you really want to go birding near McCall, Idaho</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>locs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">45</span>, <span class="sc">-</span><span class="dv">116</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="fu">SitesReport</span>(<span class="at">centers =</span> locs, </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">ebird_key =</span> key, </span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">species_seen =</span> my_species)</span></code></pre></div>
+<p>The resulting report will be called Goals-Report.html and you can
+open it in your favorite web browser.</p>
+</div>
+<div id="multiple-sites-with-names" class="section level3">
+<h3>Multiple sites, with names</h3>
+<p>The example above only uses one center on which to base searches and
+does not provide a name for that center (it will be given the default
+name of “Center 1” in the report). In the example below, we provide two
+starting points. Note that a list of nearby sites <em>for each starting
+point</em> will be included in the results. That is, the report will
+include the top five sites near the first set of latitude and longitude
+coordinates and the top five sites near the second set of latitude and
+longitude coordinates. The example assumes you have loaded in your
+species list and the location of your eBird API key file as in the first
+example, above.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For more than one location, centers can be a matrix or a data frame, here </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># we use a matrix of two sites</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>loc_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">c</span>(<span class="fl">39.5</span>, <span class="sc">-</span><span class="fl">118.8</span>, <span class="dv">39</span>, <span class="sc">-</span><span class="fl">119.1</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Instead of default &quot;Center 1&quot; and &quot;Center 2&quot;, we can use custom names</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>loc_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Fallon&quot;</span>, <span class="st">&quot;Yerington&quot;</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Sites report now uses loc_names in the output</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">SitesReport</span>(<span class="at">centers =</span> loc_mat, </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">ebird_key =</span> key, </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">species_seen =</span> my_species, </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">center_names =</span> loc_names)</span></code></pre></div>
+</div>
+<div id="multiple-sites-from-a-data-frame-narrower-range-and-informative-report-file-name" class="section level3">
+<h3>Multiple sites from a data frame, narrower range, and informative
+report file name</h3>
+<p>The <code>SitesReport</code> can also accommodate a data frame of
+latitude and longitude coordinates. You can also give your report a
+different name (with <code>report_filename</code>) and specify where it
+is saved (with <code>report_dir</code>).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>loc_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">latitude =</span> <span class="fu">c</span>(<span class="fl">39.5</span>, <span class="dv">39</span>, <span class="dv">40</span>),</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">longitude =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">118.8</span>, <span class="sc">-</span><span class="fl">119.1</span>, <span class="sc">-</span><span class="fl">118.6</span>))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>loc_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Fallon&quot;</span>, <span class="st">&quot;Yerington&quot;</span>, <span class="st">&quot;Humbolt Wildlife&quot;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># We can set the area to search by passing values to the dist argument</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">SitesReport</span>(<span class="at">centers =</span> loc_df, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">ebird_key =</span> key, </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">dist =</span> <span class="dv">25</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">species_seen =</span> my_species, </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">center_names =</span> loc_names,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">report_filename =</span> <span class="st">&quot;Nevada-sites&quot;</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">report_dir =</span> <span class="st">&quot;~/Desktop&quot;</span>) <span class="co"># Saves report to desktop</span></span></code></pre></div>
+</div>
+<div id="helpful-tips" class="section level3">
+<h3>Helpful tips</h3>
+<ul>
+<li>This should go without saying, but you are very unlikely to see
+<em>all</em> of the species that have been identified as being recently
+observed at a given site. There might be recent observations that result
+in a <a href="https://ebird.org/species/norgos">Northern Goshawk</a>
+showing up in the output report, but lifeR makes no guarantees that you
+will actually see that godforsaken bird.</li>
+<li>Along similar lines, this report makes no claims on the veracity of
+observations on which the top sites are identified. Difficult to
+identify species or species only detected by call or song often find
+their way onto these reports. We leave it to individual users to decide
+if it is worth the trip to a site where someone claims to have
+identified a Chihuahuan Raven preening its pale neck feathers amongst an
+unkindness of Common Ravens.</li>
+<li>The longer the list you use (e.g. your life list, your year list,
+etc), the fewer sites/species will be identified in the report. If you
+find you are running <code>SitesReport</code> and few or no sites are
+being returned, try:
+<ul>
+<li>A shorter, more restrictive list (e.g. use your year list instead of
+your life list)</li>
+<li>A larger radius to search (up to a maximum of 50km)</li>
+<li>Additional centers to start your search from (i.e. one that is 100km
+from your home base)</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="how-does-it-work" class="section level2">
+<h2>How does it work?</h2>
+<p>The main goal, identifying sites to visit to find species you have
+yet to see, uses eBird’s API to query for recent local observations.
+Specifically, the <code>SitesReport</code> function:</p>
+<ol style="list-style-type: decimal">
+<li>Queries eBird to find all species seen within a certain radius of
+the latitude and longitude coordinates you provide,</li>
+<li>Compares the list of recently observed species to the list you
+provide (e.g.  your year list), to identify the unseen species,</li>
+<li>For each unseen species, queries eBird again, this time to find all
+the nearby <em>sites</em> at which that species was recently seen,</li>
+<li>Identifies the sites with the most unseen species,</li>
+<li>Creates maps, tables, and the final report.</li>
+</ol>
+<p>Perhaps you are asking yourself “what is the difference between steps
+1 and 3?” The two separate queries are required because the first only
+returns the most recent observation of each species for a given region.
+That is, even though the <a href="https://ebird.org/species/bbwduc">Black-bellied Whistling Duck</a>
+has been seen at 14 nearby sites, only the most recent observation (and
+therefore locality information) is returned by eBird in step 1. It is
+not until step 3 where we retrieve <em>all</em> the sites at which that
+species was recently seen.</p>
+</div>
+<div id="what-doesnt-the-package-do" class="section level2">
+<h2>What doesn’t the package do?</h2>
+<ul>
+<li><strong>Connect to your eBird account</strong>. The eBird API is
+designed to query publicly available data about observations. It does
+not provide a way to query about individual users’ accounts. It is for
+this reason that you are responsible for downloading your species list
+and feeding it to <code>SitesReport()</code>.</li>
+<li><strong>Include additional measures of confidence</strong>. It would
+be nice if lifeR could include some estimate of the likelihood of seeing
+each species based on how many people have seen it or the average number
+of individuals observed. It <em>would</em> be nice, but those data are
+not available through the eBird API. The only information that is
+returned by eBird is details for the most recent observation of a
+particular species at a particular site; that is, there is no means of
+determining if a species was seen by 100% of the observers on a
+particular day, or by 5% of the observers.</li>
+</ul>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
