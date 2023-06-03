@@ -7,7 +7,10 @@ knitr::opts_chunk$set(
 ## ----setup, echo = FALSE------------------------------------------------------
 library(lifeR)
 
-## ----install, eval = FALSE----------------------------------------------------
+## ----install-cran, eval = FALSE-----------------------------------------------
+#  install.packages("lifeR")
+
+## ----install-github, eval = FALSE---------------------------------------------
 #  install.packages("remotes")
 #  remotes::install_github(repo = "jcoliver/lifeR")
 
@@ -27,7 +30,7 @@ library(lifeR)
 #  user_list <- read.csv(file = list_file)
 #  
 #  # Extract the common names of species from your list
-#  my_species <- SplitNames(x = user_list$Species)$Common
+#  my_species <- user_list$Common
 #  
 #  # Read in eBird API key from a text file; replace the argument to file with
 #  # the actual location of your eBird key file
@@ -39,6 +42,12 @@ library(lifeR)
 #  SitesReport(centers = locs,
 #              ebird_key = key,
 #              species_seen = my_species)
+
+## ---- current-species, eval = FALSE-------------------------------------------
+#  my_species <- user_list$Common
+
+## ---- older-species, eval = FALSE---------------------------------------------
+#  my_species <- SplitNames(x = user_list$Species)$Common
 
 ## ----example-2, eval = FALSE--------------------------------------------------
 #  # For more than one location, centers can be a matrix or a data frame, here
