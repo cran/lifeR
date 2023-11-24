@@ -355,16 +355,16 @@ output is a report of sites to visit in a region where species
 <div id="installation" class="section level1">
 <h1>Installation</h1>
 <p>You can install lifeR from CRAN via:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;lifeR&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;lifeR&quot;</span>)</span></code></pre></div>
 <p>Alternatively, you can download the development version from GitHub
 with the help of the remotes package:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="at">repo =</span> <span class="st">&quot;jcoliver/lifeR&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;remotes&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="at">repo =</span> <span class="st">&quot;jcoliver/lifeR&quot;</span>)</span></code></pre></div>
 <p>If you install from GitHub and want to have the introductory vignette
 included in the installation, then pass
 <code>build_vignettes = TRUE</code> in the call to
 <code>install_github()</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="at">repo =</span> <span class="st">&quot;jcoliver/lifeR&quot;</span>, <span class="at">build_vignettes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="at">repo =</span> <span class="st">&quot;jcoliver/lifeR&quot;</span>, <span class="at">build_vignettes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="using-lifer" class="section level1">
 <h1>Using lifeR</h1>
@@ -434,30 +434,30 @@ Idaho, USA. It uses one function from lifeR:</p>
 <li><code>SitesReport</code> a function that handles all the querying of
 eBird, comparing lists, and building the report</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lifeR)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># To use the sample list included in this package</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>list_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;example-list.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;lifeR&quot;</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># If you have your list file downloaded, replace the line above with one that </span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># indicates the location of your list file, e.g.</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># list_file &lt;- &quot;~/Desktop/ebird_world_year_2021_list.csv&quot;</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the list of species into memory</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>user_list <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> list_file)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the common names of species from your list</span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>my_species <span class="ot">&lt;-</span> user_list<span class="sc">$</span>Common</span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Read in eBird API key from a text file; replace the argument to file with </span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># the actual location of your eBird key file</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>key <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="at">file =</span> <span class="st">&quot;ebird-api-key.txt&quot;</span>, <span class="at">what =</span> <span class="st">&quot;character&quot;</span>)</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co"># A single center requires vector of coordinates</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Change these, unless you really want to go birding near McCall, Idaho</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>locs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">45</span>, <span class="sc">-</span><span class="dv">116</span>)</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="fu">SitesReport</span>(<span class="at">centers =</span> locs, </span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">ebird_key =</span> key, </span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">species_seen =</span> my_species)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(lifeR)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># To use the sample list included in this package</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>list_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;example-list.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;lifeR&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co"># If you have your list file downloaded, replace the line above with one that </span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co"># indicates the location of your list file, e.g.</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co"># list_file &lt;- &quot;~/Desktop/ebird_world_year_2021_list.csv&quot;</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co"># Read the list of species into memory</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>user_list <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> list_file)</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co"># Extract the common names of species from your list</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>my_species <span class="ot">&lt;-</span> user_list<span class="sc">$</span>Common</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co"># Read in eBird API key from a text file; replace the argument to file with </span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co"># the actual location of your eBird key file</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>key <span class="ot">&lt;-</span> <span class="fu">scan</span>(<span class="at">file =</span> <span class="st">&quot;ebird-api-key.txt&quot;</span>, <span class="at">what =</span> <span class="st">&quot;character&quot;</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co"># A single center requires vector of coordinates</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co"># Change these, unless you really want to go birding near McCall, Idaho</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>locs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">45</span>, <span class="sc">-</span><span class="dv">116</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="fu">SitesReport</span>(<span class="at">centers =</span> locs, </span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>            <span class="at">ebird_key =</span> key, </span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>            <span class="at">species_seen =</span> my_species)</span></code></pre></div>
 <p>The resulting report will be called Goals-Report.html and you can
 open it in your favorite web browser.</p>
 <p>NB: If the list file you are using was downloaded prior to 2023, the
@@ -465,9 +465,9 @@ format was different - the common and scientific names were combined in
 a single column (called <code>Species</code>) that needed to be split.
 If your list is one of these older downloads, you will need to replace
 this line:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>my_species <span class="ot">&lt;-</span> user_list<span class="sc">$</span>Common</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>my_species <span class="ot">&lt;-</span> user_list<span class="sc">$</span>Common</span></code></pre></div>
 <p>with this:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>my_species <span class="ot">&lt;-</span> <span class="fu">SplitNames</span>(<span class="at">x =</span> user_list<span class="sc">$</span>Species)<span class="sc">$</span>Common</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>my_species <span class="ot">&lt;-</span> <span class="fu">SplitNames</span>(<span class="at">x =</span> user_list<span class="sc">$</span>Species)<span class="sc">$</span>Common</span></code></pre></div>
 <p>The line above will use <code>SplitNames()</code>, a helper function
 to deal with the format of species names returned from eBird for older
 downloads. Note this is only necessary if the <em>download</em> was
@@ -487,18 +487,18 @@ coordinates and the top five sites near the second set of latitude and
 longitude coordinates. The example assumes you have loaded in your
 species list and the location of your eBird API key file as in the first
 example, above.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For more than one location, centers can be a matrix or a data frame, here </span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># we use a matrix of two sites</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>loc_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">c</span>(<span class="fl">39.5</span>, <span class="sc">-</span><span class="fl">118.8</span>, <span class="dv">39</span>, <span class="sc">-</span><span class="fl">119.1</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Instead of default &quot;Center 1&quot; and &quot;Center 2&quot;, we can use custom names</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>loc_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Fallon&quot;</span>, <span class="st">&quot;Yerington&quot;</span>)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Sites report now uses loc_names in the output</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">SitesReport</span>(<span class="at">centers =</span> loc_mat, </span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">ebird_key =</span> key, </span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">species_seen =</span> my_species, </span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">center_names =</span> loc_names)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># For more than one location, centers can be a matrix or a data frame, here </span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co"># we use a matrix of two sites</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>loc_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">c</span>(<span class="fl">39.5</span>, <span class="sc">-</span><span class="fl">118.8</span>, <span class="dv">39</span>, <span class="sc">-</span><span class="fl">119.1</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co"># Instead of default &quot;Center 1&quot; and &quot;Center 2&quot;, we can use custom names</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>loc_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Fallon&quot;</span>, <span class="st">&quot;Yerington&quot;</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co"># Sites report now uses loc_names in the output</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="fu">SitesReport</span>(<span class="at">centers =</span> loc_mat, </span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>            <span class="at">ebird_key =</span> key, </span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>            <span class="at">species_seen =</span> my_species, </span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>            <span class="at">center_names =</span> loc_names)</span></code></pre></div>
 </div>
 <div id="multiple-sites-from-a-data-frame-narrower-range-and-informative-report-file-name" class="section level3">
 <h3>Multiple sites from a data frame, narrower range, and informative
@@ -507,18 +507,18 @@ report file name</h3>
 latitude and longitude coordinates. You can also give your report a
 different name (with <code>report_filename</code>) and specify where it
 is saved (with <code>report_dir</code>).</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>loc_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">latitude =</span> <span class="fu">c</span>(<span class="fl">39.5</span>, <span class="dv">39</span>, <span class="dv">40</span>),</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">longitude =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">118.8</span>, <span class="sc">-</span><span class="fl">119.1</span>, <span class="sc">-</span><span class="fl">118.6</span>))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>loc_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Fallon&quot;</span>, <span class="st">&quot;Yerington&quot;</span>, <span class="st">&quot;Humbolt Wildlife&quot;</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># We can set the area to search by passing values to the dist argument</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">SitesReport</span>(<span class="at">centers =</span> loc_df, </span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">ebird_key =</span> key, </span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">dist =</span> <span class="dv">25</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">species_seen =</span> my_species, </span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">center_names =</span> loc_names,</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">report_filename =</span> <span class="st">&quot;Nevada-sites&quot;</span>,</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">report_dir =</span> <span class="st">&quot;~/Desktop&quot;</span>) <span class="co"># Saves report to desktop</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>loc_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">latitude =</span> <span class="fu">c</span>(<span class="fl">39.5</span>, <span class="dv">39</span>, <span class="dv">40</span>),</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                     <span class="at">longitude =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">118.8</span>, <span class="sc">-</span><span class="fl">119.1</span>, <span class="sc">-</span><span class="fl">118.6</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>loc_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Fallon&quot;</span>, <span class="st">&quot;Yerington&quot;</span>, <span class="st">&quot;Humbolt Wildlife&quot;</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co"># We can set the area to search by passing values to the dist argument</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="fu">SitesReport</span>(<span class="at">centers =</span> loc_df, </span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>            <span class="at">ebird_key =</span> key, </span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>            <span class="at">dist =</span> <span class="dv">25</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>            <span class="at">species_seen =</span> my_species, </span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>            <span class="at">center_names =</span> loc_names,</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>            <span class="at">report_filename =</span> <span class="st">&quot;Nevada-sites&quot;</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>            <span class="at">report_dir =</span> <span class="st">&quot;~/Desktop&quot;</span>) <span class="co"># Saves report to desktop</span></span></code></pre></div>
 </div>
 <div id="helpful-tips" class="section level3">
 <h3>Helpful tips</h3>

@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -43,10 +43,10 @@ library(lifeR)
 #              ebird_key = key,
 #              species_seen = my_species)
 
-## ---- current-species, eval = FALSE-------------------------------------------
+## ----current-species, eval = FALSE--------------------------------------------
 #  my_species <- user_list$Common
 
-## ---- older-species, eval = FALSE---------------------------------------------
+## ----older-species, eval = FALSE----------------------------------------------
 #  my_species <- SplitNames(x = user_list$Species)$Common
 
 ## ----example-2, eval = FALSE--------------------------------------------------

@@ -1,7 +1,7 @@
 Package: lifeR
 Type: Package
 Title: Identify Sites for Your Bird List
-Version: 0.9.7
+Version: 1.0.1
 Authors@R: 
   c(person(given = "Jeffrey",
            family = "Oliver",
@@ -17,15 +17,16 @@ Encoding: UTF-8
 Depends: R (>= 4.2.0)
 Imports: curl (>= 4.3), dplyr (>= 1.0.2), jsonlite (>= 1.7.0), knitr
         (>= 1.31), readr (>= 1.4.0), rmarkdown (>= 2.7), stringr (>=
-        1.4.0), ggplot2 (>= 3.3.3), ggmap (>= 3.0.0)
-RoxygenNote: 7.2.0
+        1.4.0), ggplot2 (>= 3.4.4), maptiles (>= 0.6.1), terra (>=
+        1.7-55), tidyterra (>= 0.5.0)
+RoxygenNote: 7.2.3
 Suggests: testthat
 VignetteBuilder: knitr
 URL: https://jcoliver.github.io/lifeR/,
         https://github.com/jcoliver/lifeR/
 NeedsCompilation: no
-Packaged: 2023-06-03 00:02:46 UTC; jcoliver
+Packaged: 2023-11-24 21:09:41 UTC; jcoliver
 Author: Jeffrey Oliver [aut, cre] (<https://orcid.org/0000-0003-2160-1086>)
 Maintainer: Jeffrey Oliver <jcoliver@arizona.edu>
 Repository: CRAN
-Date/Publication: 2023-06-03 03:50:02 UTC
+Date/Publication: 2023-11-24 22:10:13 UTC

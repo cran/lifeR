@@ -8,14 +8,14 @@
 #'   \item{lat}{Numeric latitude in decimal degrees}
 #'   \item{lng}{Numeric longitude in decimal degrees}
 #' }
-#' @param center_lng, center_lat Numeric decimal degrees longitude and latitude 
+#' @param center_lng, center_lat numeric decimal degrees longitude and latitude 
 #' of the geographic center used for searching sites.
 #' 
 #' @details The function is primarily used by \code{SitesReport} via the 
 #' template RMarkdown file used to build reports. It is not intended for 
 #' standalone use.
 #' 
-#' @return A ggmap object.
+#' @return A ggplot object; if map server is unavailable, returns \code{NULL}.
 #' 
 #' @examples
 #' \dontrun{
@@ -26,8 +26,11 @@
 #'   lifeR::MapSites(sites = localities)
 #' }
 #' 
+#' @import dplyr
 #' @import ggplot2
-#' @importFrom ggmap get_map ggmap
+#' @importFrom terra ext
+#' @importFrom tidyterra geom_spatraster_rgb
+#' @importFrom maptiles get_tiles
 #' @export
 #' 
 #' @keywords internal
@@ -38,7 +41,7 @@ MapSites <- function(sites, center_lng = NULL, center_lat = NULL) {
   # Make a shorter version of the location name for map
   sites$print_name <- substr(x = sites$locName,
                              start = 1, 
-                             stop = 16)
+                             stop = 24)
   # Add in the number of new species
   sites$print_name <- paste0(sites$print_name, " (", sites$num_new, ")")
   
@@ -92,38 +95,23 @@ MapSites <- function(sites, center_lng = NULL, center_lat = NULL) {
   # Ensure lat/lng are in bounds
   map_bounds <- CoordInBounds(x = map_bounds,
                               latitude = c(FALSE, TRUE, FALSE, TRUE))
-  
-  # Want to be sure stamen maps is responsive
-  # First use ggmap::get_map to get URLs of all map tiles, check each of them 
-  # for 200 status, then do query again as long as all the tiles are returning 
-  # status 200
-  map_urls <- ggmap::get_map(location = map_bounds,
-                             source = "stamen",
-                             maptype = "terrain",
-                             urlonly = TRUE)
-  # Run curl_fetch_memory on each tile URL
-  test_tiles <- lapply(X = map_urls, FUN = curl::curl_fetch_memory)
-  # Pull out status_code element from each of the test_tiles sub-lists
-  statuses <- unlist(lapply(test_tiles, "[[", "status_code"))
-  if (all(statuses == 200)) {
-    # All tiles look good, proceed with mapping
-    center_map <- ggmap::get_map(location = map_bounds, 
-                                 source = "stamen", 
-                                 maptype = "terrain")
+
+  # Now we are ready to actually build the map
+  sites_map <- NULL
+  tryCatch(expr = {
+    map_ext <- terra::ext(c(map_bounds["left"], # xmin, xmax, ymin, ymax
+                            map_bounds["right"],
+                            map_bounds["bottom"],
+                            map_bounds["top"]))
     
-    # Need to color by site name, using print_name for legend
-    sites_map <- ggmap::ggmap(ggmap = center_map) +
-      ggplot2::geom_point(data = sites,
-                          mapping = ggplot2::aes(x = .data$lng, 
-                                                 y = .data$lat, 
-                                                 fill = .data$print_name),
-                          size = 3,
-                          color = "black",
-                          shape = 21) +
-      ggplot2::scale_fill_brewer(name = "Site", palette = "Paired") +
-      ggplot2::theme_minimal() +
-      ggplot2::xlab(label = "Longitude") +
-      ggplot2::ylab(label = "Latitude")
+    # Get the map tiles for this extent
+    # TODO: Would be nice to make the zoom value dynamic, based on lat/lng span
+    map_tiles <- maptiles::get_tiles(x = map_ext, 
+                                     zoom = 10,
+                                     crop = TRUE)
+    # Base map, making it slightly transparent makes it easier to see points
+    sites_map <- ggplot2::ggplot() +
+      tidyterra::geom_spatraster_rgb(data = map_tiles, alpha = 0.7)
     
     # If the coordinates for the center are not NULL, add them as a point
     if (!is.null(center_lat) & !is.null(center_lng)) {
@@ -142,19 +130,36 @@ MapSites <- function(sites, center_lng = NULL, center_lat = NULL) {
                             shape = 10, # black circle outline with center plus
                             color = "black")
     }
-    return(sites_map)
-  } else { # One or more tiles wasn't returned
-    # Warn user about problems with map and return NULL
-    warning("The map server did not respond to request, maps may not be drawn.")
-    return(NULL)
-  }
+    
+    # Add the points and a legend  
+    sites_map <- sites_map + 
+      ggplot2::geom_point(data = sites,
+                          mapping = ggplot2::aes(x = .data$lng, 
+                                                 y = .data$lat, 
+                                                 fill = .data$print_name),
+                          size = 3,
+                          color = "black",
+                          shape = 21) +
+      ggplot2::scale_fill_brewer(name = "Site", palette = "Paired") +
+      ggplot2::theme_minimal() +
+      ggplot2::xlab(label = "Longitude") +
+      ggplot2::ylab(label = "Latitude")
+  }, # End of expression to try
+  error = function(e) {
+    message("Map creation unsuccessful; likely map server is down.")
+    e
+  }, # End of error catch
+  finally = NULL) # end of tryCatch
+  
+  # Return either ggplot object (if successful) or NULL (unsuccessful)
+  return(sites_map)
 }
 
-#' Determine if coordinate is in bounds, and if not, return closed valid value
+#' Determine if coordinate is in bounds, and if not, return valid value
 #' 
-#' @param x numeric decimal degree, longitude or latitude
-#' @param direction logical indicating whether \code{x} is latitude or not 
-#' (i.e. is longitude)
+#' @param x numeric four coordinates of bounding box in decimal degrees 
+#' @param latitude logical vector of length four indicating whether each 
+#' element in \code{x} is latitude or not (i.e. is longitude)
 #' 
 #' @details A helper function designed to keep map bounds from using invalid 
 #' coordinates (latitudes outside of -90 and 90; longitudes outside of -180 and 
