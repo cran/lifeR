@@ -30,7 +30,7 @@ library(lifeR)
 #  user_list <- read.csv(file = list_file)
 #  
 #  # Extract the common names of species from your list
-#  my_species <- user_list$Common
+#  my_species <- user_list$Common.Name
 #  
 #  # Read in eBird API key from a text file; replace the argument to file with
 #  # the actual location of your eBird key file

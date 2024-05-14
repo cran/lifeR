@@ -56,7 +56,7 @@
 #'   recent <- RecentNearby(key = key, lat = 32.28, lng = -111.02, dist = 5)
 #' }
 #'
-#' @importFrom curl curl new_handle curl_fetch_memory
+#' @importFrom curl curl new_handle
 #' @importFrom jsonlite fromJSON
 #' 
 #' @export
@@ -93,25 +93,20 @@ RecentNearby <- function(key,
     ebird_connection <- curl::curl(request,
                                    handle = curl::new_handle(CONNECTTIMEOUT = timeout_sec))
 
-    # Make sure that request is OK
-    test_connection <- curl::curl_fetch_memory(request)
-
-    # Status 200, OK to proceed
-    if (test_connection$status_code == 200) {
-      observations <- try(expr = {
-        ebirdJSON <- readLines(ebird_connection, warn = FALSE)
-        success <- TRUE
-        # If query returns zero observations, it returns an empty JSON object
-        # "[]"
-        if (nchar(ebirdJSON) == 2) {
-          # This looks odd, but it is how we assign value is assigned to zero
-          # observations
-          NULL
-        } else {
-          jsonlite::fromJSON(txt = ebirdJSON)
-        }
-      }, silent = TRUE)
-    }
+    observations <- try(expr = {
+      ebirdJSON <- readLines(ebird_connection, warn = FALSE)
+      success <- TRUE
+      # If query returns zero observations, it returns an empty JSON object
+      # "[]"
+      if (nchar(ebirdJSON) == 2) {
+        # This looks odd, but it is how we assign value is assigned to zero
+        # observations
+        NULL
+      } else {
+        jsonlite::fromJSON(txt = ebirdJSON)
+      }
+    }, silent = TRUE)
+    
     close(ebird_connection)
     tries <- tries + 1
   }
