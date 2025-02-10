@@ -20,7 +20,7 @@ SitesReport(
   max_tries = 5,
   timeout_sec = 30,
   messages = c("minimal", "none", "verbose"),
-  drop_patterns = c("sp.", "/", "Domestic type", "hybrid"),
+  drop_patterns = c("sp\\\\.", "\\\\/", "Domestic type", "hybrid"),
   include_maps = TRUE
 )
 }
@@ -75,7 +75,9 @@ or "verbose".}
 \item{drop_patterns}{Character vector of patterns in species' names to
 exclude certain species from consideration, such as domesticated species,
 hybrids, and observations not identified to species level (e.g.
-"Toxostoma sp.").}
+"Toxostoma sp."). The function uses \code{grep} with \code{fixed = FALSE} to 
+identify which species to exclude, hence the backslashes in the default 
+values in \code{drop_patterns}.}
 
 \item{include_maps}{Logical vector indicating whether or not to draw maps 
 of identified sites; should be length 1 or the number of centers (i.e. same

@@ -3,7 +3,7 @@
 #' @param data A data.frame with observations, likely the object from a call to
 #' \code{RecentNearby}.
 #' @param patterns Character vector of patterns in \code{colname} column to
-#' omit.
+#' omit; interprets regular expressions.
 #' @param colname Character vector indicating column with names to search for
 #' \code{patterns}.
 #'
@@ -23,7 +23,7 @@
 #' 
 #' @keywords internal
 DropPatterns <- function(data,
-                         patterns = c("sp.", "/", "Domestic type", "hybrid"),
+                         patterns = c("sp\\.", "\\/", "Domestic type", "hybrid"),
                          colname = "comName"){
 
   # Make sure there are patterns to match

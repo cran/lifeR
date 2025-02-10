@@ -6,7 +6,7 @@
 \usage{
 DropPatterns(
   data,
-  patterns = c("sp.", "/", "Domestic type", "hybrid"),
+  patterns = c("sp\\\\.", "\\\\/", "Domestic type", "hybrid"),
   colname = "comName"
 )
 }
@@ -15,7 +15,7 @@ DropPatterns(
 \code{RecentNearby}.}
 
 \item{patterns}{Character vector of patterns in \code{colname} column to
-omit.}
+omit; interprets regular expressions.}
 
 \item{colname}{Character vector indicating column with names to search for
 \code{patterns}.}
